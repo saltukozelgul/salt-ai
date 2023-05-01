@@ -23,7 +23,20 @@ module.exports = {
       subcommand.setName("geliştir").setDescription("Şirketi geliştirir.")
     )
     .addSubcommand((subcommand) =>
-      subcommand.setName("işe-al").setDescription("Şirketinize çalışan alır.")
+      subcommand
+        .setName("işe-al")
+        .setDescription("Şirketinize çalışan alır.")
+        .addStringOption((option) =>
+          option
+            .setName("çalışan-adı")
+            .setDescription("Çalışanın adını belirler")
+            .setRequired(true)
+        )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("topla")
+        .setDescription("Şirketinizin gelirini toplar.")
     ),
   async execute(interaction, mongoClient) {
     let user;
@@ -179,6 +192,55 @@ module.exports = {
         );
       await interaction.reply(
         `Şirketiniz geliştirildi. Yeni seviye: ${user.company.level + 1}`
+      );
+    } else if (interaction.options.getSubcommand() === "işe-al") {
+      // Check if user has a company
+      if (user.company.name == "") {
+        await interaction.reply(`Önce bir şirket kurmanız gerekli.`);
+        await mongoClient.close();
+        return;
+      }
+      // Check if user has enough money
+      if (user.balance < 25 * user.company.level) {
+        await interaction.reply(
+          `Yeterli paranız yok gerekli para: ${25 * user.company.level}₺`
+        );
+        await mongoClient.close();
+        return;
+      }
+      // Check if user has enough space for new employee
+      if (user.company.employees.length >= user.company.level * 5) {
+        await interaction.reply(
+          `Şirketinizin kapasitesi dolu. Kapasite: ${
+            user.company.level * 5
+          } Çalışan Sayısı: ${user.company.employees.length}`
+        );
+        await mongoClient.close();
+        return;
+      }
+      // Update company's employees and user's balance on single query and also income
+      await mongoClient
+        .db("salt-ai")
+        .collection("users")
+        .updateOne(
+          { userId: interaction.user.id },
+          {
+            $push: {
+              "company.employees": {
+                name: interaction.options.getString("çalışan-adı"),
+              },
+            },
+            $set: {
+              balance: user.balance - 25 * user.company.level,
+              "company.income":
+                (user.company.employees.length + 1) * 10 * user.company.level,
+            },
+          }
+        );
+      await interaction.reply(
+        `Çalışan işe alındı. Yeni gelir: ${
+          (user.company.employees.length + 1) * 10 * user.company.level
+        }₺`
       );
     }
 
