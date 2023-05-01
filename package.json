@@ -1,0 +1,25 @@
+{
+  "name": "salt_ai",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saltukozelgul/salt-ai.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saltukozelgul/salt-ai/issues"
+  },
+  "homepage": "https://github.com/saltukozelgul/salt-ai#readme",
+  "dependencies": {
+    "discord.js": "^14.10.0",
+    "dotenv": "^16.0.3",
+    "mongodb": "^5.3.0"
+  }
+}
