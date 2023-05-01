@@ -23,7 +23,6 @@ async function run() {
     console.log("Database connection established.");
   } finally {
     // Ensures that the client will close when you finish/error
-    await clientMongo.close();
   }
 }
 run().catch(console.dir);

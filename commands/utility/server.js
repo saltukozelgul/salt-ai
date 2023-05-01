@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-
+const { checkUser } = require("../../db-utils/check-user");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("server")
