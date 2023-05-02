@@ -2,6 +2,7 @@ const { SlashCommandBuilder, AttachmentBuilder } = require("discord.js");
 const { createUser } = require("../../db-utils/create-user");
 const { checkUser } = require("../../db-utils/check-user");
 const { createCanvas, loadImage } = require("canvas");
+let background = null;
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("savaş")
@@ -45,9 +46,11 @@ module.exports = {
     // on the left and right side of the canvas
     const canvas = createCanvas(700, 250);
     let ctx = canvas.getContext("2d");
-    // static background just color
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // dynamic background
+    background = await loadImage(
+      "https://media.istockphoto.com/id/1331309597/vector/realistic-arena-for-warrior-battles-background-for-games-digital-graphics.jpg?s=612x612&w=0&k=20&c=erwpPJx00sUqpLkhLFNv_q1g_DRUUvDIc32kKC8dhm8="
+    );
+
     const avatar1 = await loadImage(
       interaction.user
         .displayAvatarURL({ size: 512, dynamic: true })
@@ -184,17 +187,16 @@ function updateCanvas(
   wl1,
   wl2
 ) {
-  ctx.fillStyle = "#000000";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
   ctx.drawImage(avatar1, 25, 25, 150, 150);
   ctx.drawImage(avatar2, 525, 25, 150, 150);
   // Draw damage text with red color
   ctx.fillStyle = "#FFFFFF";
   ctx.font = "25px sans-serif";
   if (attackersName === "") {
-    ctx.fillText(`İki rakip arasında savaş başlıyor}`, 235, 50);
+    ctx.fillText(`    Savaş başlıyor!`, 235, 50);
   } else {
-    ctx.fillText(`${attackersName} ${damage} hasar verdi`, 235, 50);
+    ctx.fillText(`${attackersName.slice(0, 6)} ${damage} hasar verdi`, 235, 50);
   }
   if (health1 < 0) {
     health1 = 0;
@@ -209,7 +211,7 @@ function updateCanvas(
     // Draw winner text
     ctx.fillStyle = "#FFFFFF";
     ctx.font = "40px sans-serif";
-    ctx.fillText("Kazanan: " + attackersName, 205, 150);
+    ctx.fillText("Kazanan: " + attackersName.slice(0, 6), 205, 150);
   }
   if (health2 < 0) {
     health2 = 0;
@@ -224,7 +226,7 @@ function updateCanvas(
     // Draw winner text
     ctx.fillStyle = "#FFFFFF";
     ctx.font = "40px sans-serif";
-    ctx.fillText("Kazanan: " + attackersName, 205, 150);
+    ctx.fillText("Kazanan: " + attackersName.slice(0, 6), 205, 150);
   }
   // Draw health texts above bars
   ctx.fillStyle = "#FF0000";
