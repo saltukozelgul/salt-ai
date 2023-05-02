@@ -149,6 +149,7 @@ module.exports = {
       return;
     }
     const chosenSong = first5Results[choice - 1];
+    console.log(interaction.client.distube.getQueue(interaction));
     const embed = {
       author: {
         name: "Salt-AI - Müzik",
@@ -162,7 +163,11 @@ module.exports = {
         url: chosenSong.thumbnail,
       },
       title: chosenSong.name,
-      description: `Şarkıyı açan: ${interaction.user}`,
+      // If the another song is already playing
+      description:
+        interaction.client.distube.getQueue(interaction) === undefined
+          ? `Şu anda çalınıyor: ${chosenSong.name}`
+          : `Sıraya eklendi: ${chosenSong.name}`,
       fields: [
         {
           name: "Süre",
@@ -185,9 +190,12 @@ module.exports = {
         text: "Salt.AI",
       },
     };
-
+    console.log();
     // play the song
     await interaction.client.distube.play(voiceChannel, chosenSong.url);
+    // set the queue's text channel to the interaction's channel
+    interaction.client.distube.getQueue(interaction).textChannel =
+      interaction.channel;
     await interaction.followUp({ embeds: [embed] });
   },
 };

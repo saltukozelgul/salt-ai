@@ -6,6 +6,11 @@ module.exports = {
     .setDescription("Çalan şarkıyı duraklatır"),
 
   async execute(interaction) {
-    await interaction.reply("This is a testtt!");
+    await interaction.deferReply();
+
+    // pause the music
+    await interaction.client.distube.pause(interaction);
+
+    await interaction.followUp("Şarkı duraklatıldı!");
   },
 };

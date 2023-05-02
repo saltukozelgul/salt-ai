@@ -6,6 +6,11 @@ module.exports = {
     .setDescription("Duraklatılan şarkıyı devam ettirir"),
 
   async execute(interaction) {
-    await interaction.reply("This is a testtt!");
+    await interaction.deferReply();
+
+    // resume the music
+    await interaction.client.distube.resume(interaction);
+
+    await interaction.followUp("Şarkı devam ettiriliyor!");
   },
 };

@@ -2,7 +2,13 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { DisTube } = require("distube");
-const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
+const {
+  Client,
+  Collection,
+  Events,
+  GatewayIntentBits,
+  ActivityType,
+} = require("discord.js");
 require("dotenv").config();
 token = process.env.TOKEN;
 
@@ -74,6 +80,7 @@ for (const folder of commandFolders) {
 // We use 'c' for the event parameter to keep it separate from the already defined 'client'
 client.once(Events.ClientReady, (c) => {
   console.log(`Ready! Logged in as ${c.user.tag}`);
+  c.user.setActivity("/yardım", { type: ActivityType.Playing });
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -90,6 +97,52 @@ client.on(Events.InteractionCreate, async (interaction) => {
     await command.execute(interaction, clientMongo);
   } catch (error) {
     console.error(error);
+  }
+});
+
+// When any song is end and skipped the other song will play
+client.distube.on("finishSong", async (queue, song) => {
+  if (queue) {
+    const chosenSong = queue.songs[1];
+    const embed = {
+      author: {
+        name: "Salt-AI - Müzik",
+        icon_url:
+          "https://cdn3.iconfinder.com/data/icons/2018-social-media-logotypes/1000/2018_social_media_popular_app_logo_youtube-512.png",
+      },
+      // red  youtube
+      color: 0xff0000,
+      // icon
+      thumbnail: {
+        url: chosenSong.thumbnail,
+      },
+      title: chosenSong.name,
+      // If the another song is already playing
+      description: `Şu anda çalınıyor: ${chosenSong.name}`,
+      fields: [
+        {
+          name: "Süre",
+          value: chosenSong.formattedDuration,
+          inline: true,
+        },
+        {
+          name: "Görüntülenme",
+          value: chosenSong.views,
+          inline: true,
+        },
+        {
+          name: "Kanal",
+          value: chosenSong.uploader.name,
+          inline: true,
+        },
+      ],
+      timestamp: new Date(),
+      footer: {
+        text: "Salt.AI",
+      },
+    };
+    // send discord.js v 14
+    await queue.textChannel.send({ embeds: [embed] });
   }
 });
 
