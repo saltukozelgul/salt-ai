@@ -1,6 +1,7 @@
 // Require the necessary discord.js classes
 const fs = require("node:fs");
 const path = require("node:path");
+const { DisTube } = require("distube");
 const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
 require("dotenv").config();
 token = process.env.TOKEN;
@@ -28,7 +29,22 @@ async function run() {
 run().catch(console.dir);
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.MessageContent,
+  ],
+});
+
+client.distube = new DisTube(client, {
+  leaveOnStop: false,
+  leaveOnFinish: true,
+  emitNewSongOnly: true,
+  emitAddSongWhenCreatingQueue: false,
+  emitAddListWhenCreatingQueue: false,
+});
 
 // Create a new collection for commands
 client.commands = new Collection();
