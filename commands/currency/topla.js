@@ -38,8 +38,8 @@ module.exports = {
       const lastCollected = new Date(user.lastCollected);
       const now = new Date();
       const diffTime = Math.abs(now - lastCollected);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      if (diffDays >= 1) {
+      const diffMinutes = Math.ceil(diffTime / (1000 * 60));
+      if (diffMinutes >= 1440) {
         await interaction.reply(`Günlük paranızı topladınız: 250₺`);
         await mongoClient
           .db("salt-ai")
