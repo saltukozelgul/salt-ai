@@ -90,7 +90,7 @@ module.exports = {
         // set first letter of company name to uppercase
         title: `${
           user.company.name.charAt(0).toUpperCase() + user.company.name.slice(1)
-        }`,
+        } A.Ş.`,
         thumbnail: {
           url: "https://i.hizliresim.com/ll9by4v.png",
         },
@@ -233,7 +233,7 @@ module.exports = {
             $set: {
               balance: user.balance - 25 * user.company.level,
               "company.income":
-                (user.company.employees.length + 1) * 10 * user.company.level,
+                (user.company.employees.length + 1) * 20 * user.company.level,
             },
           }
         );

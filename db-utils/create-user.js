@@ -8,6 +8,9 @@ async function createUser(userId, username, clientMongo) {
       userId: userId,
       username: username,
       balance: 0,
+      win: 1,
+      loss: 1,
+      lastCollected: null,
       company: {
         name: "",
         income: 0,
