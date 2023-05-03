@@ -104,6 +104,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
 client.distube.on("finishSong", async (queue, song) => {
   if (queue) {
     const chosenSong = queue.songs[1];
+    if (!chosenSong) {
+      return;
+    }
     const embed = {
       author: {
         name: "Salt-AI - Müzik",

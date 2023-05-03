@@ -21,6 +21,7 @@
     "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.16.0",
     "canvas": "^2.11.2",
+    "discord-trivia": "^2.0.2",
     "discord.js": "^14.10.2",
     "distube": "^4.0.4",
     "dotenv": "^16.0.3",

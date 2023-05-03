@@ -8,7 +8,7 @@ module.exports = {
     await interaction.deferReply();
     // get the queue
     const queue = interaction.client.distube.getQueue(interaction);
-    if (!queue) return interaction.reply("Sırada şarkı yok!");
+    if (!queue) return interaction.followUp("Sırada şarkı yok!");
 
     // get the first 5 if there isnt  5 song take all
     // put them in a discord embed one field per song
