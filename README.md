@@ -2,7 +2,7 @@
 
 This is a Discord bot written in Node.js using the Discord.js library. It includes several entertainment features such as a trivia game, music playback, and its own currency system.
 
-## Getting Stared
+## Getting Started
 
 To use this bot, you'll need to set up a few things first:
 
